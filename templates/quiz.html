@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>Moji Moji - 퀴즈</title>
+
+  <style>
+    @font-face {
+      font-family: 'KotraHope';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/KOTRAHOPE.woff2') format('woff2');
+      font-weight: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'JejuStoneWall';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-EF@1.0/EF_jejudoldam.woff2') format('woff2');
+      font-weight: normal;
+      font-display: swap;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background-image: url('/static/images/emoji.jpg');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: 'KotraHope';
+      position: relative;
+    }
+
+    h1 {
+      font-family: 'JejuStoneWall';
+      font-size: 80px;
+      color: #000;
+      margin: 0;
+      position: absolute;
+      top: 50px;
+    }
+
+    .quiz-box {
+      background: white;
+      padding: 80px 200px;
+      border-radius: 30px;
+      margin-top: 0;
+      display: inline-block;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+      min-width: 600px;
+      text-align: center;
+    }
+
+    .emoji {
+      font-size: 100px;
+      margin: 0;
+    }
+
+    .question-text {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #333;
+    }
+
+    .question-image {
+      max-width: 100%;
+      max-height: 300px;
+      margin-top: 20px;
+      border-radius: 15px;
+    }
+
+    .answer-box {
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .answer-box input {
+      width: 650px;
+      height: 80px;
+      border-radius: 20px;
+      border: none;
+      padding: 0 30px;
+      font-size: 24px;
+      outline: none;
+      font-family: 'KotraHope';
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .answer-box button {
+      width: 80px;
+      height: 80px;
+      margin-left: 20px;
+      border: none;
+      border-radius: 20px;
+      background: white;
+      font-size: 35px;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+      transition: transform 0.2s;
+    }
+
+    .answer-box button:hover {
+      transform: scale(1.05);
+    }
+
+    .hint-btn {
+      position: fixed;
+      bottom: 40px;
+      left: 60px;
+      background: #fff99a;
+      border: none;
+      border-radius: 20px;
+      padding: 18px 45px;
+      font-size: 28px;
+      cursor: pointer;
+      font-weight: bold;
+      font-family: 'KotraHope';
+    }
+
+    .ranking-btn {
+      position: fixed;
+      bottom: 40px;
+      right: 60px;
+      background: #fff99a;
+      border: none;
+      border-radius: 20px;
+      padding: 18px 45px;
+      font-size: 28px;
+      cursor: pointer;
+      font-weight: bold;
+      font-family: 'KotraHope';
+    }
+
+    /* 말풍선 스타일 */
+    .hint-bubble {
+      position: fixed;
+      bottom: 130px;
+      left: 60px;
+      background: white;
+      padding: 30px 45px;        /* 패딩 증가 */
+      border-radius: 25px;       /* 둥글기 증가 */
+      font-size: 26px;           /* 글자 크기 증가 */
+      font-weight: bold;
+      display: none;
+      z-index: 100;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25); /* 그림자 강화 */
+      max-width: 600px;          /* 힌트폭 넓힘 */
+      line-height: 1.6;          /* 줄 간격 증가 */
+    }
+    
+    /* 메시지 */
+    .message-bubble {
+      position: fixed;
+      top: 150px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      padding: 28px 55px;        /* 더 큼 */
+      border-radius: 18px;
+      font-size: 28px;           /* 더 큼 */
+      font-weight: bold;
+      display: none;
+      z-index: 200;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Moji Moji</h1>
+
+  <!-- ⭐ 첫 문제 즉시 로딩 -->
+  <div class="quiz-box" id="quizBox">
+    <p class="emoji" id="emojiHint">{{ first_question.emoji_hint }}</p>
+    <p class="question-text" id="questionText">다음 문제를 맞혀보세요!</p>
+
+    {% if first_question.image %}
+      <img id="questionImage" src="{{ first_question.image }}" class="question-image">
+    {% else %}
+      <img id="questionImage" style="display:none;" class="question-image">
+    {% endif %}
+  </div>
+
+  <div class="answer-box">
+    <input type="text" id="answerInput" placeholder="정답을 입력하세요" autofocus />
+    <button class="submit-btn" id="submitBtn">▶</button>
+  </div>
+
+  <div class="hint-bubble" id="hintBubble">힌트를 보려면 버튼을 클릭하세요!</div>
+  <div class="message-bubble" id="messageBubble"></div>
+
+  <button class="hint-btn" id="hintBtn">힌트 보기</button>
+  <button class="ranking-btn" id="rankingBtn">현재 순위 보기</button>
+
+  <script>
+    const FIRST_QUESTION = {{ first_question|tojson }};
+    const TOTAL = {{ total_questions }};
+    const CATEGORY = "{{ category }}";
+  
+    let currentQuestion = FIRST_QUESTION;
+  
+    const emojiHint = document.getElementById("emojiHint");
+    const questionText = document.getElementById("questionText");
+    const questionImage = document.getElementById("questionImage");
+    const answerInput = document.getElementById("answerInput");
+    const messageBubble = document.getElementById("messageBubble");
+    const hintBubble = document.getElementById("hintBubble");
+  
+    function showMessage(text) {
+      messageBubble.textContent = text;
+      messageBubble.style.display = "block";
+      setTimeout(() => messageBubble.style.display = "none", 2000);
+    }
+  
+    document.getElementById("submitBtn").addEventListener("click", checkAnswer);
+    answerInput.addEventListener("keypress", e => {
+      if (e.key === "Enter") checkAnswer();
+    });
+  
+    async function loadNext() {
+      const res = await fetch("/api/get_question");
+      const data = await res.json();
+  
+      if (data.finished) {
+        showMessage("🎉 모든 문제를 풀었습니다!");
+        return;
+      }
+  
+      currentQuestion = data;
+  
+      // UI 업데이트
+      emojiHint.textContent = data.emoji_hint;
+      questionImage.style.display = data.image ? "block" : "none";
+      if (data.image) questionImage.src = data.image;
+  
+      answerInput.value = "";
+      answerInput.disabled = false;
+  
+      // ⭐ 힌트 풍선 자동 닫기 추가 ⭐
+      hintBubble.style.display = "none";
+    }
+  
+    /* ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+       완성된 checkAnswer 함수 (PASS 포함)
+       ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐ */
+    async function checkAnswer() {
+      const answer = answerInput.value.trim();
+      if (!answer) return;
+  
+      const res = await fetch("/api/check_answer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ answer })
+      });
+  
+      const data = await res.json();
+  
+      // 에러 처리
+      if (data.error) {
+        showMessage(data.error);
+        return;
+      }
+  
+      // 🎯 정답
+      if (data.correct) {
+        showMessage("🎉 정답!");
+        hintBubble.style.display = "none";  // 힌트 숨기기
+  
+        setTimeout(() => {
+          if (data.finished) {
+            showMessage("🎉 모든 문제를 풀었습니다!");
+            answerInput.disabled = true;
+          } else {
+            loadNext();
+          }
+        }, 1200);
+  
+        return;
+      }
+  
+      // 🎯 PASS 또는 시도횟수 초과 → next_question = True
+      if (data.next_question) {
+        showMessage(data.message || "다음 문제로 넘어갑니다!");
+        hintBubble.style.display = "none"; // 힌트 숨기기
+  
+        setTimeout(() => {
+          if (data.finished) {
+            showMessage("🎉 마지막 문제였습니다!");
+            answerInput.disabled = true;
+          } else {
+            loadNext();
+          }
+        }, 1200);
+  
+        return;
+      }
+  
+      // 🎯 일반 오답
+      showMessage("❌ 오답!");
+      answerInput.value = "";
+      answerInput.focus();
+    }
+  
+    document.getElementById("hintBtn").addEventListener("click", async () => {
+      const res = await fetch("/api/get_hint", { method: "POST" });
+      const data = await res.json();
+  
+      if (data.error) {
+        showMessage(data.error);
+      } else {
+        hintBubble.textContent = data.hint;
+        hintBubble.style.display = "block";
+      }
+    });
+  
+    document.getElementById("rankingBtn").addEventListener("click", () => {
+      window.location.href = "/ranking";
+    });
+  </script>  
+</body>
+</html>

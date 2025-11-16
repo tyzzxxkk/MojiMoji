@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Moji Moji</title>
+    <style>
+        @font-face {
+            font-family: 'KotraHope';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/KOTRAHOPE.woff2') format('woff2');
+            font-weight: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'JejuStoneWall';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-EF@1.0/EF_jejudoldam.woff2') format('woff2');
+            font-weight: normal;
+            font-display: swap;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-image: url('/static/images/emoji.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            font-family: 'JejuStoneWall', sans-serif;
+        }
+        
+        h1 {
+            font-size: 128px;
+            margin-top: 550px;
+            margin-bottom: 400px; /* 👈 원래 500px → 위로 약간 올림 */
+        }
+        
+        .start-btn {
+            background-color: #FFF79D;
+            font-family: 'KotraHope', sans-serif;
+            color: #000000;
+            border: none;
+            font-size: 26px;
+            padding: 20px 70px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            width: 300px;
+            height: 100px;
+            margin-bottom: 450px; /* 👈 원래 650px → 위로 200px 정도 올림 */
+        }
+
+        .start-btn:hover {
+            background-color: #ffe870;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <h1>Moji Moji</h1>
+    <button class="start-btn" onclick="location.href='/auth/login'">시작하기</button>
+</body>
+</html>

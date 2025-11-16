@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Moji Moji</title>
+<style>
+  @font-face {
+      font-family: 'KotraHope';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/KOTRAHOPE.woff2') format('woff2');
+      font-weight: normal;
+      font-display: swap;
+  }
+  
+  @font-face {
+      font-family: 'JejuStoneWall';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-EF@1.0/EF_jejudoldam.woff2') format('woff2');
+      font-weight: normal;
+      font-display: swap;
+  }
+
+  @font-face {
+      font-family: 'Pretendard';
+      src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Thin.woff') format('woff');
+      font-weight: 100;
+      font-display: swap;
+  }
+
+  /* 전체 배경 및 중앙 정렬 */
+  body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background-image: url('/static/images/emoji.jpg');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      font-family: 'Pretendard', sans-serif;
+      position: relative;
+  }
+  
+  /* 제목 스타일 */
+  h1 {
+      font-size: 110px;
+      font-family: 'JejuStoneWall', sans-serif;
+      margin: 0;
+  }
+
+  /* 사용자 정보 */
+  .user-info {
+      position: absolute;
+      top: 40px;
+      right: 60px;
+      background: white;
+      padding: 15px 30px;
+      border-radius: 15px;
+      border: 4px solid #000;
+      box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+      font-family: 'KotraHope', sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+  }
+
+  .logout-btn {
+      background: #ff6b6b;
+      color: white;
+      border: 3px solid #000;
+      padding: 8px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 16px;
+      font-family: 'KotraHope', sans-serif;
+      transition: all 0.3s;
+  }
+
+  .logout-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 2px 2px 0px rgba(0,0,0,0.3);
+  }
+  
+  /* 카드 컨테이너 */
+  .card-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 60px;
+      margin-top: 40px;
+      margin-bottom: 200px;
+      flex-wrap: nowrap;
+      font-family: 'KotraHope', sans-serif;
+  }
+  
+  /* 개별 카드 */
+  .card {
+      width: 350px;
+      height: 300px;
+      background-color: #fff;
+      border-radius: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.18);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 4px solid transparent;
+  }
+
+  .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      border: 4px solid #FFD700;
+  }
+  
+  /* 카드 상단(이모지 영역) */
+  .card-top {
+      font-size: 38px;
+      margin-top: 100px;
+  }
+  
+  /* 카드 하단(노란 영역) */
+  .card-bottom {
+      background-color: #FFF79D;
+      width: 100%;
+      text-align: center;
+      font-size: 24px;
+      padding: 18px 0;
+      border-bottom-left-radius: 18px;
+      border-bottom-right-radius: 18px;
+      font-weight: 900;
+  }
+  
+  /* 하단 이모지 배경 */
+  .bottom-bg {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      height: 180px;
+      background-image: url("/static/images/emoji-bottom.png");
+      background-size: cover;
+      background-position: center;
+      z-index: -1;
+  }
+
+  /* 랭킹 버튼 */
+  .ranking-btn {
+      position: fixed;
+      bottom: 40px;
+      right: 60px;
+      background: #fff99a;
+      border: 4px solid #000;
+      border-radius: 20px;
+      padding: 18px 45px;
+      font-size: 28px;
+      cursor: pointer;
+      font-weight: 900;
+      font-family: 'KotraHope', sans-serif;
+      box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+      transition: all 0.3s;
+      z-index: 10;
+  }
+
+  .ranking-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 6px 6px 0px rgba(0,0,0,0.3);
+  }
+
+  @media (max-width: 1200px) {
+      .card-container {
+          flex-wrap: wrap;
+          gap: 40px;
+      }
+
+      .card {
+          width: 280px;
+          height: 250px;
+      }
+
+      h1 {
+          font-size: 80px;
+      }
+  }
+
+  @media (max-width: 768px) {
+      h1 {
+          font-size: 60px;
+      }
+
+      .card {
+          width: 220px;
+          height: 220px;
+      }
+
+      .card-top {
+          font-size: 32px;
+          margin-top: 60px;
+      }
+
+      .card-bottom {
+          font-size: 20px;
+          padding: 15px 0;
+      }
+
+      .user-info {
+          top: 20px;
+          right: 20px;
+          font-size: 16px;
+          padding: 10px 20px;
+      }
+
+      .ranking-btn {
+          bottom: 20px;
+          right: 20px;
+          font-size: 20px;
+          padding: 12px 30px;
+      }
+  }
+</style>
+</head>
+<body>
+  <h1>Moji Moji</h1>
+
+  <!-- 사용자 정보 -->
+  <div class="user-info">
+    <span>👤 {{ username }}님</span>
+    <button class="logout-btn" onclick="location.href='/logout'">로그아웃</button>
+  </div>
+
+  <div class="card-container">
+    <div class="card" onclick="location.href='/quiz/movie'">
+      <div class="card-top">🎬🍿🎥🎞️</div>
+      <div class="card-bottom">영화</div>
+    </div>
+    <div class="card" onclick="location.href='/quiz/drama'">
+      <div class="card-top">📺❤️🎭🌹</div>
+      <div class="card-bottom">드라마</div>
+    </div>
+    <div class="card" onclick="location.href='/quiz/song'">
+      <div class="card-top">🎵🎤🎧🎶</div>
+      <div class="card-bottom">노래</div>
+    </div>
+    <div class="card" onclick="location.href='/quiz/tv_program'">
+      <div class="card-top">📺🎙️🤣🧠</div>
+      <div class="card-bottom">예능 프로그램</div>
+    </div>
+  </div>
+
+  <button class="ranking-btn" onclick="location.href='/ranking'">현재 순위 보기 🏆</button>
+
+  <div class="bottom-bg"></div>
+</body>
+</html>

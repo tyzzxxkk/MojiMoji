@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>로그인</title>
+<style>
+    @font-face {
+        font-family: 'KotraHope';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/KOTRAHOPE.woff2') format('woff2');
+        font-weight: normal;
+        font-display: swap;
+    }
+    
+    @font-face {
+        font-family: 'JejuStoneWall';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-EF@1.0/EF_jejudoldam.woff2') format('woff2');
+        font-weight: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Pretendard';
+        src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Thin.woff') format('woff');
+        font-weight: 100;
+        font-display: swap;
+    }
+    
+    /* 전체 배경 및 중앙 정렬 */
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        background-image: url('/static/images/emoji.jpg');
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+        font-family: 'Pretendard', sans-serif;
+    }
+    
+    /* 제목 스타일 */
+    h1 {
+        font-size: 110px;
+        font-family: 'JejuStoneWall', sans-serif;
+    }
+
+    .container {
+        background: rgba(255, 255, 255, 0.9);
+        width: 450px;
+        border-radius: 20px;
+        padding: 40px 30px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        backdrop-filter: blur(5px);
+        margin-bottom: 150px;
+      }
+      
+      .container h2 {
+        font-family: 'KotraHope', sans-serif;
+        margin-bottom: 25px;
+        font-size: 30px;
+        color: #000;
+      }
+      
+      .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 14px;
+        color: #333;
+      }
+
+      input {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        outline: none;
+        box-sizing: border-box;
+      }
+
+      input:focus {
+        border-color: #ffeb3b;
+      }
+      
+      .btn {
+        width: 100%;
+        padding: 14px 0;
+        border: none;
+        border-radius: 12px;
+        background-color: #FFF79D;
+        color: black;
+        font-family: 'KotraHope', sans-serif;
+        font-size: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .btn:hover {
+        background-color: #ffe870;
+        transform: scale(1.05);
+      }
+      
+      .sub {
+        margin-top: 15px;
+        font-size: 14px;
+      }
+
+      .sub a {
+        color: #ff9900;
+        text-decoration: none;
+      }
+
+      .sub a:hover {
+        text-decoration: underline;
+      }
+
+      /* Flash 메시지 영역 */
+      .flash-container {
+        position: fixed;
+        top: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+      }
+
+      .flash {
+        margin: 10px 0;
+        padding: 15px 25px;
+        border-radius: 12px;
+        font-size: 18px;
+        font-family: 'KotraHope', sans-serif;
+        text-align: center;
+        animation: fadeout 3s forwards;
+      }
+
+      .flash.success {
+        background-color: #C8F7C5;
+        color: #1B5E20;
+        box-shadow: 0 3px 8px rgba(0, 128, 0, 0.2);
+      }
+
+      .flash.error {
+        background-color: #F8D7DA;
+        color: #C62828;
+        box-shadow: 0 3px 8px rgba(255, 0, 0, 0.2);
+      }
+
+      @keyframes fadeout {
+        0% { opacity: 1; }
+        80% { opacity: 1; }
+        100% { opacity: 0; display: none; }
+      }
+</style>
+</head>
+<body>
+  <h1>Moji Moji</h1>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="container">
+    <h2>로그인</h2>
+    <form method="post" action="/auth/login">
+      <div class="form-group">
+        <label>아이디</label>
+        <input name="username" placeholder="ID" required>
+      </div>
+      <div class="form-group">
+        <label>비밀번호</label>
+        <input type="password" name="password" placeholder="password" required>
+      </div>
+      <button class="btn" type="submit">로그인</button>
+    </form>
+    <div class="sub">
+      아직 계정이 없어요? <a href="/auth/register">회원가입</a>
+    </div>
+  </div>
+</body>
+</html>
